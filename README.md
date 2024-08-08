@@ -8,14 +8,11 @@ FGTK - Fat GC-MS ToolKit是用shiny与一系列R包开发的应用，主要用�
 # 下载
 
 ## 源代码
-
 github: https://github.com/Gemini-xuanwu/FGTK  
 gitee: https://gitee.com/genyy/FGTK
 
 ## 安装包
-
-github: https://github.com/Gemini-xuanwu/FGTK/releases  
-gitee: https://gitee.com/genyy/FGTK/releases
+https://github.com/Gemini-xuanwu/FGTK/releases  
 
 # 图标
 

@@ -31,10 +31,9 @@ stat <- function(compare_result_dir,
   df <-
     openxlsx::read.xlsx(paste0(compare_result_dir, "/", "peak.xlsx"))
   
-  # Renumber the compounds and reorder according to retention time
+  # Reorder according to retention time
   df <- df %>%
-    arrange(RT) %>%
-    mutate(Compound = paste0("Compound_", seq(1, nrow(.))))
+    arrange(RT)
   
   ### If there is only one duplicate group or just have one group then only the percentage will be calculated.
   if (any(table(groups$Group) < 2) |
@@ -88,9 +87,18 @@ stat <- function(compare_result_dir,
     aov <- aov(Value ~ Group, data = tmp)
     
     # Multiple comparisons and use LSD method
-    aovH <- agricolae::LSD.test(aov, "Group")$groups
-    colnames(aovH)[1:2] <- c("Mean", "Label")
-    aovH$Group <- row.names(aovH)
+    aovHt <- try({
+      agricolae::HSD.test(aov, "Group")$groups
+    }, silent = TRUE)
+    if (class(aovHt) == "try-error") {
+      aovH <- aggregate(Value ~ Group, data = tmp, mean) %>%
+        mutate(Label = "a") %>% select(2, 3, 1)
+      colnames(aovH)[1] <- "Mean"
+    } else{
+      aovH <- aovHt
+      colnames(aovH)[1:2] <- c("Mean", "Label")
+      aovH$Group <- row.names(aovH)
+    }
     
     # Calculate standard deviation or standard error of mean (sd/sd or sem/plotrix::std.error)
     if (calculate_type == "standard deviation") {
@@ -117,7 +125,11 @@ stat <- function(compare_result_dir,
     
     # insert calculated value
     insert <- new_data$all
-    insert <- append(insert, summary(aov)[[1]][1, 5])
+    if(class(aovHt) == "try-error") {
+      insert <- append(insert, 1)
+    } else{
+      insert <- append(insert, summary(aov)[[1]][1, 5])
+    }
     df2[i, -1:-6] <- insert
   }
   # Save results

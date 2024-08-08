@@ -34,10 +34,9 @@ get_pubchem_info <- function(compare_result_dir) {
   df <-
     openxlsx::read.xlsx(paste0(compare_result_dir, "/", "peak.xlsx"))[, 1:6]
   
-  # Renumber the compounds and reorder according to retention time
+  # Reorder according to retention time
   df <- df %>%
-    arrange(RT) %>%
-    mutate(Compound = paste0("Compound_", seq(1, nrow(.))))
+    arrange(RT)
   
   # Identify the Pubchem CID number
   cid <-

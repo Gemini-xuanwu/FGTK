@@ -48,6 +48,15 @@ classification_summaries <- function(compare_result_dir, calculate_type = FALSE)
     return(return_result)
   }
   
+  # Screening for actually detected compounds
+  ensure_id <- df %>%
+    select(-1:-6) %>%
+    mutate(across(everything(), ~ ifelse(. > 0, 1, .))) %>%
+    rowSums()
+  undetected_compounds <- compound_info[which(ensure_id == 0), ]
+  compound_info <- compound_info[which(ensure_id > 0), ]
+  df <- df[which(ensure_id > 0), ]
+  
   # Count the number of classes for all compounds
   compound_classification_count <- count(compound_info, Class)
   
@@ -96,9 +105,18 @@ classification_summaries <- function(compare_result_dir, calculate_type = FALSE)
     aov <- aov(Value ~ Group, data = tmp)
     
     # Multiple comparisons and use HSD method
-    aovH <- agricolae::HSD.test(aov, "Group")$groups
-    colnames(aovH)[1:2] <- c("Mean", "Label")
-    aovH$Group <- row.names(aovH)
+    aovHt <- try({
+      agricolae::HSD.test(aov, "Group")$groups
+    }, silent = TRUE)
+    if (class(aovHt) == "try-error") {
+      aovH <- aggregate(Value ~ Group, data = tmp, mean) %>%
+        mutate(Label = "a") %>% select(2, 3, 1)
+      colnames(aovH)[1] <- "Mean"
+    } else{
+      aovH <- aovHt
+      colnames(aovH)[1:2] <- c("Mean", "Label")
+      aovH$Group <- row.names(aovH)
+    }
     
     # Calculate standard deviation or standard error of mean (sd/sd or sem/plotrix::std.error)
     if (calculate_type == "standard deviation") {
@@ -111,14 +129,18 @@ classification_summaries <- function(compare_result_dir, calculate_type = FALSE)
     # Merge mean, sd, label
     new_data = sds %>%
       inner_join(aovH, by = c(Group = "Group")) %>%
-      mutate(all = paste0(round(Mean * 100, 5), "±", round(sd * 100, 5), Label))
+      mutate(all = paste0(round(Mean, 2), "±", round(sd, 2), Label))
     
     # rearrange
     new_data <- new_data[order(new_data[, "Group"]), ]
     
     # insert calculated value
     insert <- new_data$all
-    insert <- append(insert, summary(aov)[[1]][1, 5])
+    if(class(aovHt) == "try-error") {
+      insert <- append(insert, 1)
+    } else{
+      insert <- append(insert, summary(aov)[[1]][1, 5])
+    }
     group_class_sum_absolute[i, -1] <- t(insert)
   }
   
@@ -135,9 +157,18 @@ classification_summaries <- function(compare_result_dir, calculate_type = FALSE)
     aov <- aov(Value ~ Group, data = tmp)
     
     # Multiple comparisons and use HSD method
-    aovH <- agricolae::HSD.test(aov, "Group")$groups
-    colnames(aovH)[1:2] <- c("Mean", "Label")
-    aovH$Group <- row.names(aovH)
+    aovHt <- try({
+      agricolae::HSD.test(aov, "Group")$groups
+    }, silent = TRUE)
+    if (class(aovHt) == "try-error") {
+      aovH <- aggregate(Value ~ Group, data = tmp, mean) %>%
+        mutate(Label = "a") %>% select(2, 3, 1)
+      colnames(aovH)[1] <- "Mean"
+    } else{
+      aovH <- aovHt
+      colnames(aovH)[1:2] <- c("Mean", "Label")
+      aovH$Group <- row.names(aovH)
+    }
     
     # Calculate standard deviation or standard error of mean (sd/sd or sem/plotrix::std.error)
     if (calculate_type == "standard deviation") {
@@ -150,14 +181,18 @@ classification_summaries <- function(compare_result_dir, calculate_type = FALSE)
     # Merge mean, sd, label
     new_data = sds %>%
       inner_join(aovH, by = c(Group = "Group")) %>%
-      mutate(all = paste0(round(Mean, 5), "±", round(sd, 5), "%", Label))
+      mutate(all = paste0(round(Mean, 2), "±", round(sd, 2), "%", Label))
     
     # rearrange
     new_data <- new_data[order(new_data[, "Group"]), ]
     
     # insert calculated value
     insert <- new_data$all
-    insert <- append(insert, summary(aov)[[1]][1, 5])
+    if(class(aovHt) == "try-error") {
+      insert <- append(insert, 1)
+    } else{
+      insert <- append(insert, summary(aov)[[1]][1, 5])
+    }
     group_class_sum_relative[i, -1] <- t(insert)
   }
   
@@ -187,6 +222,9 @@ classification_summaries <- function(compare_result_dir, calculate_type = FALSE)
   wb <- openxlsx::createWorkbook()
   openxlsx::addWorksheet(wb, "all_count")
   openxlsx::writeData(wb, "all_count", compound_classification_count)
+  
+  openxlsx::addWorksheet(wb, "undetected_compounds")
+  openxlsx::writeData(wb, "undetected_compounds", undetected_compounds)
   
   openxlsx::addWorksheet(wb, "sample_count")
   openxlsx::writeData(wb, "sample_count", sample_class_count)

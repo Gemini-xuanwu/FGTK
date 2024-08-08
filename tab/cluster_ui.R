@@ -1,4 +1,5 @@
 cluster_ui <- fluidPage(
+  h2("This function is still in beta!!!", style = "color: red;"),
   box(
     title = "Folder path & settings",
     width = NULL,
