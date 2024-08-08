@@ -48,6 +48,10 @@ plot_cluster <- function(compare_result_dir,
   df <-
     openxlsx::read.xlsx(paste0(compare_result_dir, "/", "peak.xlsx"))
   
+  # Screening for actually detected compounds
+  ensure_id <- df[, -1:-6] %>% rowSums()
+  df <- df[which(ensure_id > 0), ]
+  
   # Change of color range and data processing according to the type of drawing
   if (type == "compound") {
     rownames(df) <- df$Compound

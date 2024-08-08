@@ -11,8 +11,7 @@ github: https://github.com/Gemini-xuanwu/FGTK
 gitee: https://gitee.com/genyy/FGTK
 
 ## Installer
-github: https://github.com/Gemini-xuanwu/FGTK/releases  
-gitee: https://gitee.com/genyy/FGTK/releases
+https://github.com/Gemini-xuanwu/FGTK/releases  
 
 # Icons
 

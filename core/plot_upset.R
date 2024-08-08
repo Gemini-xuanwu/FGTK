@@ -44,6 +44,10 @@ plot_upset <- function(compare_result_dir,
     upset_df <- upset_df %>% mutate(new_column = compound_id)
     colnames(upset_df)[dim(upset_df)[2]] <- one_group
   }
+  # Screening for actually detected compounds
+  ensure_id <- upset_df[, -1:-6] %>% rowSums()
+  upset_df <- upset_df[which(ensure_id > 0), ]
+  
   upset_plot_df <-
     upset_df %>% pivot_longer(cols = -1:-6,
                               names_to = "group",
@@ -66,6 +70,7 @@ plot_upset <- function(compare_result_dir,
     base_annotations = list(
       'Intersection size' = ComplexUpset::intersection_size(
         text_colors = c(on_background = 'black', on_bar = 'white'),
+        text = list(size = 4.5),
         bar_number_threshold = 0.9,
         text_mapping = aes(family = "serif")
       )

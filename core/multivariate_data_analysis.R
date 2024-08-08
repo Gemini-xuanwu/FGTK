@@ -61,10 +61,21 @@ multivariate_data_analysis <- function(compare_result_dir,
     )
   # Check PCA result
   if (PCA@summaryDF$pre < 2) {
-    return_result$type <- "error"
-    return_result$text_message <-
-      "This data could not be analysed by PCA!!!"
-    return(return_result)
+    PCA <-
+      ropls::opls(
+        df,
+        crossvalI = nrow(df) - 1,
+        predI = 2,
+        scaleC = "standard",
+        fig.pdfC = "none",
+        info.txtC = "none"
+      )
+    if (PCA@summaryDF$pre < 2) {
+      return_result$type <- "error"
+      return_result$text_message <-
+        "This data could not be analysed by PCA!!!"
+      return(return_result)
+    }
   }
   df_PCA <- as.data.frame(PCA@scoreMN) %>%
     mutate(Sample = row.names(.)) %>%
@@ -88,8 +99,11 @@ multivariate_data_analysis <- function(compare_result_dir,
       base_fontface = "plain",
       border = TRUE
     ) +
-    theme(legend.key.height = unit(20, "pt"),
-          legend.key.width = unit(20, "pt"))
+    theme(
+      legend.text = element_text(size = font_size - 4, face = "plain"),
+      legend.key.height = unit(0.05, "snpc"),
+      legend.key.width = unit(0.05, "snpc")
+    )
   # Add confidence ellipse
   if (all(table(groups$Group) > 3)) {
     PCA_plot <-
@@ -145,8 +159,11 @@ multivariate_data_analysis <- function(compare_result_dir,
       base_fontface = "plain",
       border = TRUE
     ) +
-    theme(legend.key.height = unit(20, "pt"),
-          legend.key.width = unit(20, "pt"))
+    theme(
+      legend.text = element_text(size = font_size - 4, face = "plain"),
+      legend.key.height = unit(0.05, "snpc"),
+      legend.key.width = unit(0.05, "snpc")
+    )
   # Add confidence ellipse
   if (all(table(groups$Group) > 3)) {
     PCoA_plot <-
@@ -214,8 +231,11 @@ multivariate_data_analysis <- function(compare_result_dir,
       base_fontface = "plain",
       border = TRUE
     ) +
-    theme(legend.key.height = unit(20, "pt"),
-          legend.key.width = unit(20, "pt"))
+    theme(
+      legend.text = element_text(size = font_size - 4, face = "plain"),
+      legend.key.height = unit(0.05, "snpc"),
+      legend.key.width = unit(0.05, "snpc")
+    )
   # Add confidence ellipse
   if (all(table(groups$Group) > 3)) {
     NMDS_plot <-

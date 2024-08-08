@@ -40,10 +40,9 @@ biomarker <- function(compare_result_dir,
   df <-
     openxlsx::read.xlsx(paste0(compare_result_dir, "/", "peak.xlsx"))
   
-  # Renumber the compounds and reorder according to retention time
+  # Reorder according to retention time
   df <- df %>%
-    arrange(RT) %>%
-    mutate(Compound = paste0("Compound_", seq(1, nrow(.))))
+    arrange(RT)
   
   # calculate percentage
   if (calculate_percentage == TRUE) {
@@ -161,7 +160,7 @@ biomarker <- function(compare_result_dir,
       
       # Volcano plot ----
       if (length(which(dfaux_diff$label != "")) != 0) {
-        DiffPlot <- ggplot(dfaux_diff, aes(log2(FC), -1 * log10(p))) +
+        DiffPlot <- ggplot(dfaux_diff[which(!is.na(dfaux_diff$sig)), ], aes(log2(FC), -1 * log10(p))) +
           geom_point(aes(color = sig), alpha = 0.8, size = 3) +
           labs(# title = paste(group1, " vs ", group2, " - Volcano plot", sep = ""),
             x = bquote(log[2](FC)), y = bquote(-log[10](PValue))) +
@@ -192,8 +191,9 @@ biomarker <- function(compare_result_dir,
             border = TRUE
           ) +
           theme(
-            legend.key.height = unit(20, "pt"),
-            legend.key.width = unit(20, "pt")
+            legend.text = element_text(size = font_size - 4, face = "plain"),
+            legend.key.height = unit(0.05, "snpc"),
+            legend.key.width = unit(0.05, "snpc")
           )
         ggsave(
           paste0(
@@ -210,8 +210,8 @@ biomarker <- function(compare_result_dir,
         )
       }
       
-      dfDiff <- dfaux_diff %>% filter(label != "")
-      dfPV <- dfaux_diff %>% filter(p <= 0.05)
+      dfDiff <- dfaux_diff
+      dfPV <- dfaux_diff %>% filter(label != "")
       openxlsx::write.xlsx(
         dfDiff,
         paste0(
@@ -230,7 +230,7 @@ biomarker <- function(compare_result_dir,
                              group1,
                              "_vs_",
                              group2,
-                             "_p.xlsx"
+                             "_P.xlsx"
                            ))
       
       # Create the required intermediate data
@@ -334,8 +334,9 @@ biomarker <- function(compare_result_dir,
               border = TRUE
             ) +
             theme(
-              legend.key.height = unit(20, "pt"),
-              legend.key.width = unit(20, "pt")
+              legend.text = element_text(size = font_size - 4, face = "plain"),
+              legend.key.height = unit(0.05, "snpc"),
+              legend.key.width = unit(0.05, "snpc")
             )
           if (all(table(groups$Group[which(groups$Group %in% c(group1, group2))]) > 3)) {
             PLSPlot <- PLSPlot + stat_ellipse(
@@ -442,8 +443,9 @@ biomarker <- function(compare_result_dir,
               border = TRUE
             ) +
             theme(
-              legend.key.height = unit(20, "pt"),
-              legend.key.width = unit(20, "pt")
+              legend.text = element_text(size = font_size - 4, face = "plain"),
+              legend.key.height = unit(0.05, "snpc"),
+              legend.key.width = unit(0.05, "snpc")
             )
           ggsave(
             paste(
@@ -550,8 +552,9 @@ biomarker <- function(compare_result_dir,
               border = TRUE
             ) +
             theme(
-              legend.key.height = unit(20, "pt"),
-              legend.key.width = unit(20, "pt")
+              legend.text = element_text(size = font_size - 4, face = "plain"),
+              legend.key.height = unit(0.05, "snpc"),
+              legend.key.width = unit(0.05, "snpc")
             )
           if (all(table(groups$Group[which(groups$Group %in% c(group1, group2))]) >
                   3)) {
@@ -660,8 +663,9 @@ biomarker <- function(compare_result_dir,
               border = TRUE
             ) +
             theme(
-              legend.key.height = unit(20, "pt"),
-              legend.key.width = unit(20, "pt")
+              legend.text = element_text(size = font_size - 4, face = "plain"),
+              legend.key.height = unit(0.05, "snpc"),
+              legend.key.width = unit(0.05, "snpc")
             )
           ggsave(
             paste(
@@ -800,8 +804,9 @@ biomarker <- function(compare_result_dir,
             border = TRUE
           ) +
           theme(
-            legend.key.height = unit(20, "pt"),
-            legend.key.width = unit(20, "pt")
+            legend.text = element_text(size = font_size - 4, face = "plain"),
+            legend.key.height = unit(0.05, "snpc"),
+            legend.key.width = unit(0.05, "snpc")
           )
         if (all(table(groups$Group) > 3)) {
           PLSPlot <- PLSPlot + stat_ellipse(
@@ -891,8 +896,9 @@ biomarker <- function(compare_result_dir,
             border = TRUE
           ) +
           theme(
-            legend.key.height = unit(20, "pt"),
-            legend.key.width = unit(20, "pt")
+            legend.text = element_text(size = font_size - 4, face = "plain"),
+            legend.key.height = unit(0.05, "snpc"),
+            legend.key.width = unit(0.05, "snpc")
           )
         ggsave(
           paste(
