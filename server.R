@@ -14,7 +14,6 @@ source("./core/plot_upset.R")
 source("./core/plot_cluster.R")
 source("./core/plot_2D_TIC.R")
 source("./core/plot_3D_TIC.R")
-source("./core/plot_heatmap.R")
 
 # Import workflow functions
 source("./tab/migration_server.R")
@@ -32,7 +31,6 @@ source("./tab/biomarker_server.R")
 source("./tab/venn_server.R")
 source("./tab/upset_server.R")
 source("./tab/cluster_server.R")
-source("./tab/heatmap_server.R")
 source("./tab/2D_TIC_server.R")
 source("./tab/3D_TIC_server.R")
 
@@ -64,8 +62,6 @@ function(input, output, session) {
   upset_server(input, output, session)
   # cluster server
   cluster_server(input, output, session)
-  # heatmap server
-  heatmap_server(input, output, session)
   # 2D TIC server
   TIC_2D_server(input, output, session)
   # 3D TIC server

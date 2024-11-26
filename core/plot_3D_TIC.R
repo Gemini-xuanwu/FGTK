@@ -41,8 +41,10 @@ plot_3D_TIC <- function(curve_dir_path,
     # Report an error if the CSV file is not detected
     if (length(files) == 0) {
       stop(
+        crayon::red(
           "No .CSV files found in this directory. Please delete the empty folder so that it does",
           "not affect the next calculation."
+        )
       )
     }
     samples_paths <- paste0(dir_path, "/", files)
