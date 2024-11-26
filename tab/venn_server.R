@@ -22,7 +22,9 @@ venn_server <- function(input, output, session) {
       plot_venn(
         compare_result_dir = readDirectoryInput(session, "venn_compare_result_dir"),
         group_label_font_size = input$group_label_font_size,
-        number_label_font_size = input$number_label_font_size
+        number_label_font_size = input$number_label_font_size,
+        margin = input$venn_margin,
+        label_offset = input$label_offset
       )
     })
   })
@@ -32,22 +34,38 @@ venn_server <- function(input, output, session) {
     plot_venn(
       compare_result_dir = readDirectoryInput(session, "venn_compare_result_dir"),
       group_label_font_size = input$group_label_font_size,
-      number_label_font_size = input$number_label_font_size
+      number_label_font_size = input$number_label_font_size,
+      margin = input$venn_margin,
+      label_offset = input$label_offset
     )
     if (input$venn_filetype == "pdf")
-      ggsave(paste0(
-        readDirectoryInput(session, "venn_compare_result_dir"),
-        "/venn.pdf"
-      ))
+      ggsave(
+        paste0(
+          readDirectoryInput(session, "venn_compare_result_dir"),
+          "/venn.pdf"
+        ),
+        width = input$venn_width,
+        height = input$venn_height
+      )
     else if (input$venn_filetype == "png")
-      ggsave(paste0(
-        readDirectoryInput(session, "venn_compare_result_dir"),
-        "/venn.png"
-      ), dpi = 600)
+      ggsave(
+        paste0(
+          readDirectoryInput(session, "venn_compare_result_dir"),
+          "/venn.png"
+        ),
+        dpi = 600,
+        width = input$venn_width,
+        height = input$venn_height
+      )
     else
-      ggsave(paste0(
-        readDirectoryInput(session, "venn_compare_result_dir"),
-        "/venn.pdf"
-      ))
+      ggsave(
+        paste0(
+          readDirectoryInput(session, "venn_compare_result_dir"),
+          "/venn.pdf"
+        ),
+        width = input$venn_width,
+        height = input$venn_height
+        
+      )
   })
 }

@@ -31,6 +31,25 @@ venn_ui <- fluidPage(
         max = 4
       )
     )),
+    fluidRow(column(
+      6,
+      numericInput(
+        "venn_margin",
+        label = "margin:",
+        value = 0.05,
+        min = 0,
+        max = 0.4
+      )
+    ), column(
+      6,
+      numericInput(
+        "label_offset",
+        label = "label offset:",
+        value = 0,
+        min = 0,
+        max = 1
+      )
+    )),
     actionButton("plot_venn", "Plot", icon = icon("gear", class = "fa-spin"))
   ),
   box(
@@ -42,6 +61,25 @@ venn_ui <- fluidPage(
       title = "Save settings",
       width = NULL,
       status = "warning",
+      fluidRow(column(
+        6,
+        numericInput(
+          "venn_width",
+          label = "Venn diagram width(cm):",
+          value = 5,
+          min = 2,
+          max = 10
+        )
+      ), column(
+        6,
+        numericInput(
+          "venn_height",
+          label = "Venn diagram height(cm):",
+          value = 5,
+          min = 2,
+          max = 10
+        )
+      )),
       radioButtons(
         inputId = "venn_filetype",
         label = "Choose file type to save:",
