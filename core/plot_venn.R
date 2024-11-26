@@ -1,6 +1,8 @@
 plot_venn <- function(compare_result_dir,
                       group_label_font_size = 2,
-                      number_label_font_size = 2) {
+                      number_label_font_size = 2,
+                      margin = 0.05,
+                      label_offset = 0) {
   # Import the necessary libraries
   if (!("package:tidyverse" %in% search())) {
     library(tidyverse)
@@ -46,7 +48,27 @@ plot_venn <- function(compare_result_dir,
   }
   
   # plot venn
-  if (length(venn_list) >= 3) {
+  if (length(venn_list) == 2) {
+    cs <- c("#E41A1C", "#377EB8")
+    venn.plot <- VennDiagram::venn.diagram(
+      venn_list,
+      col = cs,
+      cat.col = cs,
+      fill = cs,
+      filename = NULL,
+      euler.d = F,
+      scaled = F,
+      margin = margin,
+      imagetype = "svg",
+      fontfamily = "serif",
+      cex = number_label_font_size,
+      cat.fontfamily = "serif",
+      cat.cex = group_label_font_size,
+      cat.pos = c(-90, 90),
+      cat.dist = label_offset,
+      disable.logging = TRUE
+    )
+  } else if (length(venn_list) == 4) {
     cs <- RColorBrewer::brewer.pal(length(venn_list), "Set1")
     venn.plot <-
       VennDiagram::venn.diagram(
@@ -57,31 +79,35 @@ plot_venn <- function(compare_result_dir,
         filename = NULL,
         euler.d = F,
         scaled = F,
+        margin = 0.2,
         imagetype = "svg",
         fontfamily = "serif",
         cex = number_label_font_size,
         cat.fontfamily = "serif",
         cat.cex = group_label_font_size,
+        cat.dist = c(0.2,0.2,0.1,0.1)+label_offset,
         disable.logging = TRUE
       )
   } else{
-    cs <- c("#E41A1C", "#377EB8")
-    venn.plot <- VennDiagram::venn.diagram(
-      venn_list,
-      col = cs,
-      cat.col = cs,
-      fill = cs,
-      filename = NULL,
-      euler.d = F,
-      scaled = F,
-      imagetype = "svg",
-      fontfamily = "serif",
-      cex = number_label_font_size,
-      cat.fontfamily = "serif",
-      cat.cex = group_label_font_size,
-      cat.pos = c(90, -90),
-      disable.logging = TRUE
-    )
+    cs <- RColorBrewer::brewer.pal(length(venn_list), "Set1")
+    venn.plot <-
+      VennDiagram::venn.diagram(
+        venn_list,
+        col = cs,
+        cat.col = cs,
+        fill = cs,
+        filename = NULL,
+        euler.d = F,
+        scaled = F,
+        margin = 0.2,
+        imagetype = "svg",
+        fontfamily = "serif",
+        cex = number_label_font_size,
+        cat.fontfamily = "serif",
+        cat.cex = group_label_font_size,
+        cat.dist = label_offset,
+        disable.logging = TRUE
+      )
   }
   venn_plot <- ggplotify::as.ggplot(cowplot::plot_grid(grid::grobTree(venn.plot)))
   

@@ -191,7 +191,9 @@ biomarker <- function(compare_result_dir,
             border = TRUE
           ) +
           theme(
-            legend.text = element_text(size = font_size - 4, face = "plain"),
+            legend.box.spacing = unit(0.01, "snpc"),
+            legend.spacing.y = unit(0, "snpc"),
+            legend.text = element_text(size = font_size - 2, face = "plain"),
             legend.key.height = unit(0.05, "snpc"),
             legend.key.width = unit(0.05, "snpc")
           )
@@ -334,7 +336,9 @@ biomarker <- function(compare_result_dir,
               border = TRUE
             ) +
             theme(
-              legend.text = element_text(size = font_size - 4, face = "plain"),
+              legend.box.spacing = unit(0.01, "snpc"),
+              legend.spacing.y = unit(0, "snpc"),
+              legend.text = element_text(size = font_size - 2, face = "plain"),
               legend.key.height = unit(0.05, "snpc"),
               legend.key.width = unit(0.05, "snpc")
             )
@@ -443,7 +447,9 @@ biomarker <- function(compare_result_dir,
               border = TRUE
             ) +
             theme(
-              legend.text = element_text(size = font_size - 4, face = "plain"),
+              legend.box.spacing = unit(0.01, "snpc"),
+              legend.spacing.y = unit(0, "snpc"),
+              legend.text = element_text(size = font_size - 2, face = "plain"),
               legend.key.height = unit(0.05, "snpc"),
               legend.key.width = unit(0.05, "snpc")
             )
@@ -552,7 +558,9 @@ biomarker <- function(compare_result_dir,
               border = TRUE
             ) +
             theme(
-              legend.text = element_text(size = font_size - 4, face = "plain"),
+              legend.box.spacing = unit(0.01, "snpc"),
+              legend.spacing.y = unit(0, "snpc"),
+              legend.text = element_text(size = font_size - 2, face = "plain"),
               legend.key.height = unit(0.05, "snpc"),
               legend.key.width = unit(0.05, "snpc")
             )
@@ -663,7 +671,9 @@ biomarker <- function(compare_result_dir,
               border = TRUE
             ) +
             theme(
-              legend.text = element_text(size = font_size - 4, face = "plain"),
+              legend.box.spacing = unit(0.01, "snpc"),
+              legend.spacing.y = unit(0, "snpc"),
+              legend.text = element_text(size = font_size - 2, face = "plain"),
               legend.key.height = unit(0.05, "snpc"),
               legend.key.width = unit(0.05, "snpc")
             )
@@ -804,7 +814,9 @@ biomarker <- function(compare_result_dir,
             border = TRUE
           ) +
           theme(
-            legend.text = element_text(size = font_size - 4, face = "plain"),
+            legend.box.spacing = unit(0.01, "snpc"),
+            legend.spacing.y = unit(0, "snpc"),
+            legend.text = element_text(size = font_size - 2, face = "plain"),
             legend.key.height = unit(0.05, "snpc"),
             legend.key.width = unit(0.05, "snpc")
           )
@@ -896,7 +908,9 @@ biomarker <- function(compare_result_dir,
             border = TRUE
           ) +
           theme(
-            legend.text = element_text(size = font_size - 4, face = "plain"),
+            legend.box.spacing = unit(0.01, "snpc"),
+            legend.spacing.y = unit(0, "snpc"),
+            legend.text = element_text(size = font_size - 2, face = "plain"),
             legend.key.height = unit(0.05, "snpc"),
             legend.key.width = unit(0.05, "snpc")
           )

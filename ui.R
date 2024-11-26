@@ -26,6 +26,7 @@ source("./tab/upset_ui.R")
 source("./tab/cluster_ui.R")
 source("./tab/2D_TIC_ui.R")
 source("./tab/3D_TIC_ui.R")
+source("./tab/heatmap_ui.R")
 
 # Header setting
 header <-
@@ -109,6 +110,11 @@ sidebar <- dashboardSidebar(
         tabName = "cluster",
         icon = icon("table-cells")
       ),
+      menuSubItem(
+        "Heatamp",
+        tabName = "heatmap",
+        icon = icon("table-cells-large")
+      ),
       menuSubItem("2D TIC", tabName = "2D_TIC", icon = icon("2")),
       menuSubItem("3D TIC", tabName = "3D_TIC", icon = icon("3"))
     )
@@ -164,6 +170,8 @@ body <- dashboardBody(
     tabItem(tabName = "upset", upset_ui),
     # cluster ui
     tabItem(tabName = "cluster", cluster_ui),
+    # heatmap ui
+    tabItem(tabName = "heatmap", heatmap_ui),
     # 2D TIC ui
     tabItem(tabName = "2D_TIC", TIC_2D_ui),
     # 3D TIC ui
